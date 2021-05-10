@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <changeSet  author="Bevz"  id="changelog-1.0-create-tables" runOnChange="true">
+
+        <!-- Table type_courier -->
+        <createTable tableName="type_courier">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" type="text">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="capacity" type="float">
+                <constraints nullable="false"/>
+            </column>
+            <column name="profit_ratio" type="float"/>
+        </createTable>
+
+        <!-- Table rating_courier -->
+        <createTable tableName="rating_courier">
+            <column name="id" type="int">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="value" type="float"/>
+            <column name="min_average_time_region" type="int"/>
+        </createTable>
+
+        <!-- Table earnings_courier -->
+        <createTable tableName="earnings_courier">
+            <column name="id" type="int">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="value" type="float" defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="total_count_complete_orders" type="int" defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <!-- Table region -->
+        <createTable tableName="region">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="number" type="int">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+
+        <!-- Table time_period -->
+        <createTable tableName="time_period">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="from" type="time">
+                <constraints nullable="false"/>
+            </column>
+            <column name="to" type="time">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <!-- Table courier -->
+        <createTable  tableName="courier">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column  name="type_id"  type="int">
+                <constraints foreignKeyName="courier_type_id_type_courier_id" references="type_courier(id)" nullable="false"/>
+            </column>
+            <column name="rating_id" type="int">
+                <constraints foreignKeyName="courier_rating_id_rating_id" references="rating_courier(id)" nullable="false"/>
+            </column>
+            <column name="earnings_id" type="int">
+                <constraints foreignKeyName="courier_earnings_id_earnings_courier_id" references="earnings_courier(id)" nullable="false"/>
+            </column>
+            <column name="available_capacity" type="float">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <!-- Table total_region_indicators_courier -->
+        <createTable tableName="total_region_indicators_courier">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="courier_id" type="int">
+                <constraints foreignKeyName="tric_courier_id_courier_id" references="courier(id)" nullable="false"/>
+            </column>
+            <column name="region_id" type="int">
+                <constraints foreignKeyName="tric_region_id_region_id" references="region(id)" nullable="false"/>
+            </column>
+            <column name="total_time" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="count_complete_orders" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <!-- Table order -->
+        <sql>create type status_order as enum('UNASSIGNED', 'ASSIGNED', 'COMPLETED')</sql>
+        <createTable tableName="order">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="weight" type="float">
+                <constraints nullable="false"/>
+            </column>
+            <column name="region_id" type="int">
+                <constraints foreignKeyName="order_region_id_region_id" references="region(id)" nullable="false"/>
+            </column>
+            <column name="status" type="status_order"> <!-- defaultValue="UNASSIGNED" -->
+                <constraints nullable="false"/>
+            </column>
+            <column name="courier_id" type="int">
+                <constraints foreignKeyName="order_courier_id_courier_id" references="courier(id)"/>
+            </column>
+            <column name="datetime_assignment" type="datetime"/>
+            <column name="date_realization" type="datetime"/>
+            <column name="time_period_complete_id" type="int">
+                <constraints foreignKeyName="order_time_period_complete_id_time_period_id" references="time_period(id)"/>
+            </column>
+        </createTable>
+
+        <!-- Table courier_region -->
+        <createTable tableName="courier_region">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="courier_id" type="int">
+                <constraints primaryKey="true" foreignKeyName="courier_region_courier_id_courier_id" references="courier(id)" nullable="false"/>
+            </column>
+            <column name="region_id" type="int">
+                <constraints primaryKey="true" foreignKeyName="courier_region_region_id_region_id" references="region(id)" nullable="false"/>
+            </column>
+        </createTable>
+
+        <!-- Table courier_working_hours -->
+        <createTable tableName="courier_working_hours">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="courier_id" type="int">
+                <constraints primaryKey="true" foreignKeyName="cwh_courier_id_courier_id" references="courier(id)" nullable="false"/>
+            </column>
+            <column name="time_period_id" type="int">
+                <constraints primaryKey="true" foreignKeyName="cwh_time_period_id_time_period_id" references="time_period(id)" nullable="false"/>
+            </column>
+        </createTable>
+
+        <!-- Table order_delivery_hours -->
+        <createTable tableName="order_delivery_hours">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="order_id" type="int">
+                <constraints primaryKey="true" foreignKeyName="odh_order_id_order_id" references="order(id)" nullable="false"/>
+            </column>
+            <column name="time_period_id" type="int">
+                <constraints primaryKey="true" foreignKeyName="odh_time_period_id_time_period_id" references="time_period(id)" nullable="false"/>
+            </column>
+        </createTable>
+
+    </changeSet>
+</databaseChangeLog>
