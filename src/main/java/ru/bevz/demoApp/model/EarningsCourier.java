@@ -13,11 +13,11 @@ import javax.persistence.Table;
 public class EarningsCourier {
 
 	@Id
-	private Integer id;
+	private Long id;
 
 	@Column
-	private Float value;
+	private float value;
 
 	@Column(name = "total_count_complete_orders")
-	private Integer totalCountCompleteOrders;
+	private int totalCountCompleteOrders;
 }

@@ -3,6 +3,7 @@ package ru.bevz.demoApp.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Objects;
 import java.util.Set;
 
 @Data
@@ -11,10 +12,10 @@ import java.util.Set;
 public class Courier {
 
 	@Id
-	private Integer id;
+	private Long id;
 
 	@Column(name = "available_capacity")
-	private Float availableCapacity;
+	private float availableCapacity;
 
 	@OneToOne
 	@JoinColumn(name = "rating_id")
@@ -41,4 +42,17 @@ public class Courier {
 					inverseJoinColumns = @JoinColumn(name = "time_period_id")
 	)
 	private Set<TimePeriod> workingHours;
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Courier courier = (Courier) o;
+		return Float.compare(courier.availableCapacity, availableCapacity) == 0 && Objects.equals(id, courier.id) && Objects.equals(rating, courier.rating) && Objects.equals(earnings, courier.earnings) && Objects.equals(type, courier.type) && Objects.equals(regions, courier.regions) && Objects.equals(workingHours, courier.workingHours);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, availableCapacity, rating, earnings, type, regions, workingHours);
+	}
 }

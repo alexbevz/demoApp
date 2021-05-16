@@ -5,6 +5,7 @@ import lombok.Data;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Set;
 
 @Data
@@ -13,7 +14,7 @@ import java.util.Set;
 public class Order {
 
 	@Id
-	private Integer id;
+	private Long id;
 
 	@Column
 	private float weight;
@@ -44,4 +45,17 @@ public class Order {
 					joinColumns = @JoinColumn(name = "order_id"),
 					inverseJoinColumns = @JoinColumn(name = "time_period_id"))
 	private Set<TimePeriod> deliveryHours;
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Order order = (Order) o;
+		return Float.compare(order.weight, weight) == 0 && Objects.equals(id, order.id) && status == order.status && Objects.equals(datetimeAssignment, order.datetimeAssignment) && Objects.equals(dateRealization, order.dateRealization) && Objects.equals(region, order.region) && Objects.equals(courier, order.courier) && Objects.equals(timePeriodComplete, order.timePeriodComplete) && Objects.equals(deliveryHours, order.deliveryHours);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, weight, status, datetimeAssignment, dateRealization, region, courier, timePeriodComplete, deliveryHours);
+	}
 }

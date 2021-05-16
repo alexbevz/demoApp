@@ -14,11 +14,11 @@ import javax.persistence.Table;
 public class RatingCourier {
 
 	@Id
-	private Integer id;
+	private Long id;
 
 	@Column
-	private Float value;
+	private float value;
 
 	@Column(name = "min_average_time_region")
-	private Integer minAverageTimeRegion;
+	private int minAverageTimeRegion;
 }

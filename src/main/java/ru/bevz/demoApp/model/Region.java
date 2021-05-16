@@ -13,8 +13,8 @@ import javax.persistence.Table;
 public class Region {
 
 	@Id
-	private Integer id;
+	private Long id;
 
 	@Column
-	private Integer number;
+	private int number;
 }

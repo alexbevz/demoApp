@@ -15,7 +15,7 @@ import java.time.LocalTime;
 public class TimePeriod {
 
 	@Id
-	private Integer id;
+	private Long id;
 
 	@Column
 	private LocalTime from;

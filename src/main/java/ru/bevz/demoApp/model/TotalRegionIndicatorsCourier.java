@@ -10,13 +10,13 @@ import javax.persistence.*;
 public class TotalRegionIndicatorsCourier {
 
 	@Id
-	private Integer id;
+	private Long id;
 
 	@Column(name = "total_time")
-	private Integer totalTime;
+	private int totalTime;
 
 	@Column(name = "count_complete_orders")
-	private Integer countCompleteOrders;
+	private int countCompleteOrders;
 
 	@ManyToOne
 	@JoinColumn(name = "courier_id")

@@ -14,14 +14,14 @@ import javax.persistence.Table;
 public class TypeCourier {
 
 	@Id
-	private Integer id;
+	private Long id;
 
 	@Column
 	private String name;
 
 	@Column
-	private Float capacity;
+	private float capacity;
 
 	@Column(name = "profit_ratio")
-	private Float profitRatio;
+	private float profitRatio;
 }
