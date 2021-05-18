@@ -1,16 +1,20 @@
 package ru.bevz.demoApp.model;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Objects;
 import java.util.Set;
 
 @Data
+@EqualsAndHashCode
 @Entity
-@Table(name = "order")
+@Table(name = "orders")
+@TypeDef(name = "status_order", typeClass = PostgreSQLStatusOrder.class)
 public class Order {
 
 	@Id
@@ -20,6 +24,8 @@ public class Order {
 	private float weight;
 
 	@Column
+	@Enumerated(EnumType.STRING)
+	@Type(type = "status_order")
 	private StatusOrder status;
 
 	@Column(name = "datetime_assignment")
@@ -45,17 +51,4 @@ public class Order {
 					joinColumns = @JoinColumn(name = "order_id"),
 					inverseJoinColumns = @JoinColumn(name = "time_period_id"))
 	private Set<TimePeriod> deliveryHours;
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		Order order = (Order) o;
-		return Float.compare(order.weight, weight) == 0 && Objects.equals(id, order.id) && status == order.status && Objects.equals(datetimeAssignment, order.datetimeAssignment) && Objects.equals(dateRealization, order.dateRealization) && Objects.equals(region, order.region) && Objects.equals(courier, order.courier) && Objects.equals(timePeriodComplete, order.timePeriodComplete) && Objects.equals(deliveryHours, order.deliveryHours);
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(id, weight, status, datetimeAssignment, dateRealization, region, courier, timePeriodComplete, deliveryHours);
-	}
 }

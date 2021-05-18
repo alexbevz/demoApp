@@ -1,12 +1,13 @@
 package ru.bevz.demoApp.model;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
-import java.util.Objects;
 import java.util.Set;
 
 @Data
+@EqualsAndHashCode
 @Entity
 @Table(name = "courier")
 public class Courier {
@@ -43,16 +44,4 @@ public class Courier {
 	)
 	private Set<TimePeriod> workingHours;
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		Courier courier = (Courier) o;
-		return Float.compare(courier.availableCapacity, availableCapacity) == 0 && Objects.equals(id, courier.id) && Objects.equals(rating, courier.rating) && Objects.equals(earnings, courier.earnings) && Objects.equals(type, courier.type) && Objects.equals(regions, courier.regions) && Objects.equals(workingHours, courier.workingHours);
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(id, availableCapacity, rating, earnings, type, regions, workingHours);
-	}
 }
