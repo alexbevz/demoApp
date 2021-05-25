@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.2.xsd">
+    <changeSet id="changelog-1.2-renamed-table-order" author="Bevz">
+        <renameTable oldTableName="order" newTableName="orders"/>
+        <rollback>
+            <renameTable oldTableName="orders" newTableName="order"/>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

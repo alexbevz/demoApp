@@ -3,10 +3,7 @@ package ru.bevz.demoApp.model;
 
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalTime;
 
 @Data
@@ -15,11 +12,12 @@ import java.time.LocalTime;
 public class TimePeriod {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column
+	@Column(name = "from_time")
 	private LocalTime from;
 
-	@Column
+	@Column(name = "to_time")
 	private LocalTime to;
 }
